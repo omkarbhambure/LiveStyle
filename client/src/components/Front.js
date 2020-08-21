@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Container, Grid, Paper, Typography, Button } from "@material-ui/core";
 import fire from "../media/fire.jpg";
 import water from "../media/water.jpg";
@@ -10,9 +10,31 @@ import painting4 from "../media/4.webp";
 import painting5 from "../media/5.webp";
 import painting6 from "../media/6.webp";
 import person from "../media/person.jpg";
+import FileUpload from "../components/FileUpload";
 
 const Front = () => {
   const [selectedArt, setSelectedArt] = useState("None");
+  const [file, fileHandle] = useState([]);
+  const handleFileChange = useCallback(
+    (e) => fileHandle(e.target.files[0]),
+    []
+  );
+
+  const onStart = async () => {
+    let url = "/api/style";
+    let formData = new FormData();
+
+    formData.append("file", file);
+
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+  };
 
   return (
     <div>
@@ -63,12 +85,13 @@ const Front = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} align="center">
           <Typography>Selected Art: {selectedArt}</Typography>
+          <FileUpload file={file} handleFileChange={handleFileChange} />
           <Button
-            onClick={() => window.open("https://github.com/amogh-w", "_blank")}
+            onClick={onStart}
             style={{ marginTop: "20px" }}
             variant="contained"
           >
-            START
+            START MAGIC
           </Button>
         </Grid>
         <Grid item xs={12} sm={12}>

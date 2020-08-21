@@ -2,7 +2,7 @@ version: "3"
 
 services:
   nginx:
-    container_name: livestyle_dev_nginx
+    container_name: livestyle_prod_nginx
     build: ./nginx
     restart: always
     depends_on:
@@ -12,11 +12,11 @@ services:
       - "3050:80"
 
   client:
-    container_name: livestyle_dev_client
+    container_name: livestyle_prod_client
     tty: true
     build:
       context: ./client
-      dockerfile: dev.Dockerfile
+      dockerfile: prod.Dockerfile
     restart: always
     depends_on:
       - server
@@ -25,10 +25,10 @@ services:
       - ./client:/app
 
   server:
-    container_name: livestyle_dev_server
+    container_name: livestyle_prod_server
     build:
       context: ./server
-      dockerfile: dev.Dockerfile
+      dockerfile: prod.Dockerfile
     restart: always
     volumes:
       - ./server:/app
