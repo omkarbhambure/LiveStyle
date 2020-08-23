@@ -9,5 +9,6 @@ app.add_middleware(
 
 
 @app.post("/style")
-async def create_file(file: bytes = File(...)):
-    return {"file_size": len(file)}
+async def create_file(content_file: bytes = File(...), style_file: bytes = File(...)):
+    print(type(content_file), type(style_file))
+    return {"file_size": len(style_file)}
