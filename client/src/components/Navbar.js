@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <AppBar position="fixed">
       <Toolbar>
-        <Typography>GLive</Typography>
+        <Typography>LiveStyle</Typography>
       </Toolbar>
     </AppBar>
   );
