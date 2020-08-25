@@ -5,6 +5,8 @@ import FileUpload from "../components/FileUpload";
 const Front = () => {
   const [content_file, content_fileHandle] = useState([]);
   const [style_file, style_fileHandle] = useState([]);
+  const [output, setOutput] = useState("");
+
   const handleContentFileChange = useCallback(
     (e) => content_fileHandle(e.target.files[0]),
     []
@@ -36,10 +38,11 @@ const Front = () => {
     const response = await fetch(url, {
       method: "POST",
       body: formData,
-    });
-
-    console.log(await toBase64(content_file));
-    console.log(await toBase64(style_file));
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setOutput(data.stylized_image);
+      });
   };
 
   return (
@@ -67,6 +70,13 @@ const Front = () => {
           </Button>
         </Grid>
       </Grid>
+      <Paper>
+        {output === "" ? (
+          <Typography>Click the button!</Typography>
+        ) : (
+          <img alt="output" src={"data:image/png;base64," + output} />
+        )}
+      </Paper>
     </div>
   );
 };
