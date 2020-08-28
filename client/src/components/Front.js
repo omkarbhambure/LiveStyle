@@ -1,11 +1,14 @@
 import React, { useState, useCallback } from "react";
-import { Container, Grid, Paper, Typography, Button } from "@material-ui/core";
+import { Grid, Paper, Typography, Button, Card, CardMedia } from "@material-ui/core";
 import FileUpload from "../components/FileUpload";
-
+// import gal from "../media/gal.jpg";
+// Container, GridList, GridListTile
 const Front = () => {
   const [content_file, content_fileHandle] = useState([]);
   const [style_file, style_fileHandle] = useState([]);
   const [output, setOutput] = useState("");
+  const [contentout, setContentout] = useState("");
+  const [styleout, setStyleout] = useState("");
 
   const handleContentFileChange = useCallback(
     (e) => content_fileHandle(e.target.files[0]),
@@ -43,6 +46,16 @@ const Front = () => {
       .then((data) => {
         setOutput(data.stylized_image);
       });
+    toBase64(content_file).then(result => {
+      setContentout(result);
+    });
+    toBase64(style_file).then(result => {
+      setStyleout(result);
+    });
+  };
+
+  const onReset = () => {
+    window.location.reload(true);
   };
 
   return (
@@ -55,7 +68,7 @@ const Front = () => {
             handleFileChange={handleContentFileChange}
           />
         </Grid>
-        <Grid item xs={12} align="center">
+        <Grid item xs={12} align="center" style={{ paddingBottom: "50px" }}>
           <Typography>Select Style</Typography>
           <FileUpload
             file={style_file}
@@ -72,11 +85,38 @@ const Front = () => {
       </Grid>
       <Paper>
         {output === "" ? (
-          <Typography>Click the button!</Typography>
+          <Typography style={{ textAlign: 'center' }}>Click the button!</Typography>
         ) : (
-          <img alt="output" src={"data:image/png;base64," + output} />
-        )}
+            <Grid container spacing={4} direction="row" style={{ display: "flex", justifyContent: "center" }}>
+              <Grid item xs={12} sm={6} md={3}>
+                <Card>
+                  <CardMedia component="img" src={contentout} />
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Card>
+                  <CardMedia component="img" src={styleout} />
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Card>
+                  <CardMedia component="img" src={"data:image/png;base64," + output} />
+                </Card>
+              </Grid>
+            </Grid>
+          )}
       </Paper>
+      <Grid container spacing={2} >
+        <Grid item xs={12} align="center" style={{ paddingTop: "50px" }}>
+          <Button
+            onClick={onReset}
+            style={{ marginTop: "20px" }}
+            variant="contained"
+          >
+            Reset
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

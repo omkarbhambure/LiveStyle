@@ -62,3 +62,4 @@ async def create_file(content_file: bytes = File(...), style_file: bytes = File(
     tensor_to_image(stylized_image).save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue())
     return {"stylized_image": img_str}
+
